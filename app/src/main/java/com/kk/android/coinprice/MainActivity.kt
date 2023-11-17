@@ -48,20 +48,25 @@ class MainActivity : ComponentActivity() {
                             }
                             )
                         }
-                        composable(Screen.CoinDetailScreen.route + "/{" + Constants.PARAM_COIN_ID + "}",
+                        composable(
+                            Screen.CoinDetailScreen.route + "/{" + Constants.PARAM_COIN_ID + "}",
                             arguments = listOf(navArgument(Constants.PARAM_COIN_ID) {
                                 type = NavType.StringType
                             })
                         )
                         {
-                            CoinDetailScreen(onCoinNameClicked = { coinName ->
-                                navController.navigate(Screen.CoinWebPageScreen.route + "/${coinName}")
+                            CoinDetailScreen(onCoinNameClicked = { coinName, coinSymbol ->
+                                navController.navigate(Screen.CoinWebPageScreen.route + "/${coinName}/${coinSymbol}")
                             })
                         }
-                        composable(Screen.CoinWebPageScreen.route + "/{coinName}",
-                            arguments = listOf(navArgument("coinName") {
-                                type = NavType.StringType
-                            })
+                        composable(
+                            Screen.CoinWebPageScreen.route + "/{coinName}/{coinSymbol}",
+                            arguments = listOf(
+                                navArgument("coinName") {
+                                    type = NavType.StringType
+                                }, navArgument("coinSymbol") {
+                                    type = NavType.StringType
+                                })
                         )
                         {
                             WebViewScreen()

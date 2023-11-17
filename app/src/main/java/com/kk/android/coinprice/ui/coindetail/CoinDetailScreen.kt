@@ -27,15 +27,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.kk.android.coinprice.ui.Screen
 import com.kk.android.coinprice.ui.coindetail.components.CoinTag
 import com.kk.android.coinprice.ui.coindetail.components.TeamListItem
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CoinDetailScreen(
-    onCoinNameClicked: (coinName: String) -> Unit,
+    onCoinNameClicked: (coinName: String, coinSymbol: String) -> Unit,
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
 
@@ -58,7 +56,7 @@ fun CoinDetailScreen(
                             modifier = Modifier
                                 .weight(8f)
                                 .clickable {
-                                    onCoinNameClicked(coin.name)
+                                    onCoinNameClicked(coin.name, coin.symbol)
                                 },
                             color = Color.Blue,
                         )
