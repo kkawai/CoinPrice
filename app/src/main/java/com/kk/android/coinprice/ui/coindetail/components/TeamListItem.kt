@@ -24,7 +24,7 @@ fun TeamListItem(
         Text(text = teamMember.name,
             style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = teamMember.position?:"",
+        Text(text = teamMember.position,
             style = MaterialTheme.typography.bodySmall,
             fontStyle = FontStyle.Italic
         )
