@@ -1,7 +1,6 @@
 package com.kk.android.coinprice
 
 import android.os.Bundle
-import android.provider.ContactsContract
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,10 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavGraph
-import androidx.navigation.NavGraphNavigator
 import androidx.navigation.NavType
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,6 +18,7 @@ import androidx.navigation.navArgument
 import com.kk.android.coinprice.common.Constants
 import com.kk.android.coinprice.ui.Screen
 import com.kk.android.coinprice.ui.coindetail.CoinDetailScreen
+import com.kk.android.coinprice.ui.coindetail.WebViewScreen
 import com.kk.android.coinprice.ui.coinlist.CoinListScreen
 import com.kk.android.coinprice.ui.theme.CoinPriceTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,15 +36,36 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //Greeting("Android")
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = Screen.CoinListScreen.route) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.CoinListScreen.route
+                    ) {
                         composable(Screen.CoinListScreen.route) {
-                            CoinListScreen(navController)
-                        }
-                        composable(Screen.CoinDetailScreen.route+"/{"+Constants.PARAM_COIN_ID+"}",
-                            arguments = listOf(navArgument(Constants.PARAM_COIN_ID) { type = NavType.StringType }))
-                            {
-                                CoinDetailScreen(navController = navController)
+                            CoinListScreen(onCoinClicked = { coinId ->
+                                navController.navigate(
+                                    Screen.CoinDetailScreen.route + "/${coinId}"
+                                )
                             }
+                            )
+                        }
+                        composable(Screen.CoinDetailScreen.route + "/{" + Constants.PARAM_COIN_ID + "}",
+                            arguments = listOf(navArgument(Constants.PARAM_COIN_ID) {
+                                type = NavType.StringType
+                            })
+                        )
+                        {
+                            CoinDetailScreen(onCoinNameClicked = { coinName ->
+                                navController.navigate(Screen.CoinWebPageScreen.route + "/${coinName}")
+                            })
+                        }
+                        composable(Screen.CoinWebPageScreen.route + "/{coinName}",
+                            arguments = listOf(navArgument("coinName") {
+                                type = NavType.StringType
+                            })
+                        )
+                        {
+                            WebViewScreen()
+                        }
                     }
                 }
             }

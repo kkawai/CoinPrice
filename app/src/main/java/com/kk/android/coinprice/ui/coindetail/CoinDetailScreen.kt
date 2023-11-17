@@ -1,5 +1,6 @@
 package com.kk.android.coinprice.ui.coindetail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -27,22 +28,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.kk.android.coinprice.domain.model.TeamMember
 import com.kk.android.coinprice.ui.Screen
 import com.kk.android.coinprice.ui.coindetail.components.CoinTag
 import com.kk.android.coinprice.ui.coindetail.components.TeamListItem
-import com.kk.android.coinprice.ui.coinlist.components.CoinListItem
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CoinDetailScreen(
-    navController: NavController,
+    onCoinNameClicked: (coinName: String) -> Unit,
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
 
     val state = viewModel.coinDetailState.value
     Box(modifier = Modifier.fillMaxSize()) {
-        state.coin?.let { coin ->
+        state.coin.let { coin ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(20.dp)
@@ -56,7 +55,12 @@ fun CoinDetailScreen(
                         Text(
                             text = "${coin.rank}. ${coin.name} (${coin.symbol})",
                             style = MaterialTheme.typography.headlineMedium,
-                            modifier = Modifier.weight(8f)
+                            modifier = Modifier
+                                .weight(8f)
+                                .clickable {
+                                    onCoinNameClicked(coin.name)
+                                },
+                            color = Color.Blue,
                         )
                         Text(
                             text = if (coin.isActive) "Active" else "Inactive",

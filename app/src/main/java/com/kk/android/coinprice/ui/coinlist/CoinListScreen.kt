@@ -20,7 +20,7 @@ import com.kk.android.coinprice.ui.Screen
 import com.kk.android.coinprice.ui.coinlist.components.CoinListItem
 
 @Composable
-fun CoinListScreen(navController: NavController,
+fun CoinListScreen(onCoinClicked: (coinId: String)->Unit,
                    viewModel: CoinsListViewModel = hiltViewModel()) {
 
     val state = viewModel.coinsListState.value
@@ -28,7 +28,7 @@ fun CoinListScreen(navController: NavController,
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(state.coins) { coin ->
                 CoinListItem(coin = coin, onItemClick = {
-                    navController.navigate(Screen.CoinDetailScreen.route + "/${coin.id}")
+                    onCoinClicked(coin.id)
                 })
             }
         }
