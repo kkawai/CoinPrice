@@ -7,7 +7,7 @@ data class TagsDto (
 
   val id          : String,
   val name        : String,
-  val coinCounter : Int    = 0,
-  val icoCounter  : Int    = 0
+  val coin_counter : Int    = 0,
+  val ico_counter  : Int    = 0
 
 )

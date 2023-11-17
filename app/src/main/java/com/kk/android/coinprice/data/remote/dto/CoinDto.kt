@@ -10,8 +10,8 @@ data class CoinDto (
   val name     : String,
   val symbol   : String,
   val rank     : Int,
-  val isNew    : Boolean,
-  val isActive : Boolean,
+  val is_new    : Boolean,
+  val is_active : Boolean,
   val type     : String
 
 )
@@ -23,8 +23,8 @@ fun CoinDto.toCoin(): Coin {
     name = name,
     symbol = symbol,
     rank = rank,
-    isNew = isNew,
-    isActive = isActive,
+    isNew = is_new,
+    isActive = is_active,
     type = type
   )
 }

@@ -24,6 +24,7 @@ object AppModule {
         return Retrofit.Builder().baseUrl(Constants.BASE_API_URL)
             .addConverterFactory(Json {
                 ignoreUnknownKeys = true
+                coerceInputValues = true
             }.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(CoinPaprikaApi::class.java)
