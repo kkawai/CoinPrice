@@ -60,11 +60,11 @@ class MainActivity : ComponentActivity() {
                             })
                         }
                         composable(
-                            Screen.CoinWebPageScreen.route + "/{coinName}/{coinSymbol}",
+                            Screen.CoinWebPageScreen.route + "/{" + Constants.PARAM_COIN_NAME + "}/{" + Constants.PARAM_COIN_SYMBOL + "}",
                             arguments = listOf(
-                                navArgument("coinName") {
+                                navArgument(Constants.PARAM_COIN_NAME) {
                                     type = NavType.StringType
-                                }, navArgument("coinSymbol") {
+                                }, navArgument(Constants.PARAM_COIN_SYMBOL) {
                                     type = NavType.StringType
                                 })
                         )

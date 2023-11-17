@@ -25,8 +25,8 @@ class CoinDetailViewModel @Inject constructor(private val getCoinUseCase: GetCoi
     private val _coinDetailsState = mutableStateOf(CoinDetailsState())
     val coinDetailState: State<CoinDetailsState> = _coinDetailsState
 
-    val coinName = savedStateHandle.get<String>("coinName")
-    val coinSymbol = savedStateHandle.get<String>("coinSymbol")
+    val coinName = savedStateHandle.get<String>(Constants.PARAM_COIN_NAME)
+    val coinSymbol = savedStateHandle.get<String>(Constants.PARAM_COIN_SYMBOL)
 
     init {
         savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let { coinId ->

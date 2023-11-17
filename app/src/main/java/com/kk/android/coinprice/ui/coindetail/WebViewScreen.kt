@@ -10,12 +10,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun WebViewScreen(viewModel: CoinDetailViewModel = hiltViewModel()) {
     val context = LocalContext.current
-    val coinName = viewModel.coinName
-    val coinSymbol = viewModel.coinSymbol
     AndroidView(factory = {
         WebView(context).apply {
             webViewClient = WebViewClient()
-            loadUrl("https://www.google.com/search?q=${coinName}+${coinSymbol}+price")
+            loadUrl("https://www.google.com/search?q=${viewModel.coinName}+${viewModel.coinSymbol}+price")
         }
     })
 }
