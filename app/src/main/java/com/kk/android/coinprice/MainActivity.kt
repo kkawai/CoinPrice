@@ -10,16 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.kk.android.coinprice.common.Constants
-import com.kk.android.coinprice.ui.Screen
-import com.kk.android.coinprice.ui.coindetail.CoinDetailScreen
-import com.kk.android.coinprice.ui.coindetail.WebViewScreen
-import com.kk.android.coinprice.ui.coinlist.CoinListScreen
+import com.kk.android.coinprice.ui.CoinNav
 import com.kk.android.coinprice.ui.theme.CoinPriceTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,43 +26,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //Greeting("Android")
-                    val navController = rememberNavController()
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.CoinListScreen.route
-                    ) {
-                        composable(Screen.CoinListScreen.route) {
-                            CoinListScreen(onCoinClicked = { coinId ->
-                                navController.navigate(
-                                    Screen.CoinDetailScreen.route + "/${coinId}"
-                                )
-                            }
-                            )
-                        }
-                        composable(
-                            Screen.CoinDetailScreen.route + "/{" + Constants.PARAM_COIN_ID + "}",
-                            arguments = listOf(navArgument(Constants.PARAM_COIN_ID) {
-                                type = NavType.StringType
-                            })
-                        )
-                        {
-                            CoinDetailScreen(onCoinNameClicked = { coinName, coinSymbol ->
-                                navController.navigate(Screen.CoinWebPageScreen.route + "/${coinName}/${coinSymbol}")
-                            })
-                        }
-                        composable(
-                            Screen.CoinWebPageScreen.route + "/{" + Constants.PARAM_COIN_NAME + "}/{" + Constants.PARAM_COIN_SYMBOL + "}",
-                            arguments = listOf(
-                                navArgument(Constants.PARAM_COIN_NAME) {
-                                    type = NavType.StringType
-                                }, navArgument(Constants.PARAM_COIN_SYMBOL) {
-                                    type = NavType.StringType
-                                })
-                        )
-                        {
-                            WebViewScreen()
-                        }
-                    }
+                    CoinNav()
                 }
             }
         }

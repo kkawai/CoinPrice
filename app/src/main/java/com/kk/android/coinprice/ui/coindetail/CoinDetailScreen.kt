@@ -33,7 +33,7 @@ import com.kk.android.coinprice.ui.coindetail.components.TeamListItem
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CoinDetailScreen(
-    onCoinNameClicked: (coinName: String, coinSymbol: String) -> Unit,
+    onFetchCoinPrice: (coinName: String, coinSymbol: String) -> Unit,
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
 
@@ -56,7 +56,7 @@ fun CoinDetailScreen(
                             modifier = Modifier
                                 .weight(8f)
                                 .clickable {
-                                    onCoinNameClicked(coin.name, coin.symbol)
+                                    onFetchCoinPrice(coin.name, coin.symbol)
                                 },
                             color = Color.Blue,
                         )
