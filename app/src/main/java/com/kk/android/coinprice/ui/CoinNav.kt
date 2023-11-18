@@ -46,8 +46,11 @@ fun CoinNav() {
                     type = NavType.StringType
                 })
         )
-        {
-            WebViewScreen()
+        { backStackEntry ->
+            WebViewScreen(
+                backStackEntry.arguments?.getString(Constants.PARAM_COIN_NAME) ?: "",
+                backStackEntry.arguments?.getString(Constants.PARAM_COIN_SYMBOL) ?: ""
+            )
         }
     }
 
