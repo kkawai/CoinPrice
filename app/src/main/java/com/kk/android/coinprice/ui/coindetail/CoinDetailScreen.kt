@@ -1,5 +1,6 @@
 package com.kk.android.coinprice.ui.coindetail
 
+import android.webkit.WebView
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kk.android.coinprice.ui.coindetail.components.CoinTag
 import com.kk.android.coinprice.ui.coindetail.components.TeamListItem
+import com.kk.android.coinprice.ui.coinlist.ErrorScreen
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -40,86 +42,83 @@ fun CoinDetailScreen(
     val state = viewModel.coinDetailState.value
     Box(modifier = Modifier.fillMaxSize()) {
         state.coin.let { coin ->
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(20.dp)
-            ) {
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
 
-                        ) {
-                        Text(
-                            text = "${coin.rank}. ${coin.name} (${coin.symbol})",
-                            style = MaterialTheme.typography.headlineMedium,
-                            modifier = Modifier
-                                .weight(8f)
-                                .clickable {
-                                    onFetchCoinPrice(coin.name, coin.symbol)
-                                },
-                            color = Color.Blue,
-                        )
-                        Text(
-                            text = if (coin.isActive) "Active" else "Inactive",
-                            color = if (coin.isActive) Color.Green else Color.Red,
-                            fontStyle = FontStyle.Italic,
-                            textAlign = TextAlign.End,
-                            modifier = Modifier
-                                .align(CenterVertically)
-                                .weight(2f)
-                        )
-                    }
+            if (coin.coinId.isNotBlank()) {
 
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Text(
-                        text = coin.description,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Text(
-                        text = "Tags",
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        coin.tags.forEach { tag ->
-                            CoinTag(tag = tag)
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(20.dp)
+                ) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+
+                            ) {
+                            Text(
+                                text = "${coin.rank}. ${coin.name} (${coin.symbol})",
+                                style = MaterialTheme.typography.headlineMedium,
+                                modifier = Modifier
+                                    .weight(8f)
+                                    .clickable {
+                                        onFetchCoinPrice(coin.name, coin.symbol)
+                                    },
+                                color = Color.Blue,
+                            )
+                            Text(
+                                text = if (coin.isActive) "Active" else "Inactive",
+                                color = if (coin.isActive) Color.Green else Color.Red,
+                                fontStyle = FontStyle.Italic,
+                                textAlign = TextAlign.End,
+                                modifier = Modifier
+                                    .align(CenterVertically)
+                                    .weight(2f)
+                            )
                         }
+
+                        Spacer(modifier = Modifier.height(15.dp))
+                        Text(
+                            text = coin.description,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Spacer(modifier = Modifier.height(15.dp))
+                        Text(
+                            text = "Tags",
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                        Spacer(modifier = Modifier.height(15.dp))
+                        FlowRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            coin.tags.forEach { tag ->
+                                CoinTag(tag = tag)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(15.dp))
+                        Text(
+                            text = "Team Members",
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                        Spacer(modifier = Modifier.height(15.dp))
                     }
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Text(
-                        text = "Team Members",
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-                }
-                items(coin.team) { teamMember ->
-                    TeamListItem(
-                        teamMember = teamMember,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                    )
-                    Divider()
+                    items(coin.team) { teamMember ->
+                        TeamListItem(
+                            teamMember = teamMember,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp)
+                        )
+                        Divider()
+                    }
                 }
             }
         }
 
         if (state.error.isNotBlank()) {
-            Text(
-                text = state.error,
-                color = MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .align(Alignment.Center)
-            )
+            ErrorScreen(errorText = state.error,
+                        retryAction = {viewModel.retry()})
         } else if (state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }

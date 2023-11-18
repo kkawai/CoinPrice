@@ -25,10 +25,17 @@ class CoinDetailViewModel @Inject constructor(private val getCoinUseCase: GetCoi
     private val _coinDetailsState = mutableStateOf(CoinDetailsState())
     val coinDetailState: State<CoinDetailsState> = _coinDetailsState
 
+    private var savedCoinId = ""
+
     init {
         savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let { coinId ->
+            savedCoinId = coinId
             getCoin(coinId)
         }
+    }
+
+    fun retry() {
+        getCoin(savedCoinId);
     }
 
     private fun getCoin(coinId: String) {
@@ -43,7 +50,9 @@ class CoinDetailViewModel @Inject constructor(private val getCoinUseCase: GetCoi
                 }
                 is Resource.Success -> {
                     _coinDetailsState.value = CoinDetailsState(
-                        coin = result.data?: CoinDetail()
+                        coin = result.data?: CoinDetail(),
+                        isLoading = false,
+                        error = "" //in case of success after failure/retry
                     )
                 }
                 is Resource.Error -> {

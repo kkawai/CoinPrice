@@ -26,7 +26,7 @@ class CoinsListViewModel @Inject constructor(private val getCoinsUseCase: GetCoi
         getCoins()
     }
 
-    private fun getCoins() {
+    fun getCoins() {
         getCoinsUseCase()
             .distinctUntilChanged()
             .onEach { result ->
