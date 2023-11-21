@@ -1,6 +1,5 @@
 package com.kk.android.coinprice.ui.coindetail
 
-import android.webkit.WebView
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
