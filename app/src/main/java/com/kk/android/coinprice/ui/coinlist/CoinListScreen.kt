@@ -24,7 +24,7 @@ import com.kk.android.coinprice.ui.coinlist.components.CoinListItem
 @Composable
 fun CoinListScreen(onCoinClicked: (coinId: String)->Unit,
                    coinsListState: State<CoinsListState>,
-                   getCoins: ()->Unit) {
+                   onRetry: ()->Unit) {
 
     val state = coinsListState.value
     Box(modifier = Modifier.fillMaxSize()) {
@@ -37,7 +37,7 @@ fun CoinListScreen(onCoinClicked: (coinId: String)->Unit,
         }
         if (state.error.isNotBlank()) {
             ErrorScreen(state.error, retryAction = {
-                getCoins()
+                onRetry()
             })
         } else if (state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

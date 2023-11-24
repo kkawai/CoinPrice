@@ -19,6 +19,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -26,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.kk.android.coinprice.domain.use_case.get_coin.CoinDetailsState
 import com.kk.android.coinprice.ui.coindetail.components.CoinTag
 import com.kk.android.coinprice.ui.coindetail.components.TeamListItem
 import com.kk.android.coinprice.ui.coinlist.ErrorScreen
@@ -34,11 +35,12 @@ import com.kk.android.coinprice.ui.coinlist.ErrorScreen
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CoinDetailScreen(
-    onFetchCoinPrice: (coinName: String, coinSymbol: String) -> Unit,
-    viewModel: CoinDetailViewModel = hiltViewModel()
+    onRetry: ()->Unit,
+    coinDetailState: State<CoinDetailsState>,
+    onFetchCoinPrice: (coinName: String, coinSymbol: String) -> Unit
 ) {
 
-    val state = viewModel.coinDetailState.value
+    val state = coinDetailState.value
     Box(modifier = Modifier.fillMaxSize()) {
         state.coin.let { coin ->
 
@@ -117,7 +119,7 @@ fun CoinDetailScreen(
 
         if (state.error.isNotBlank()) {
             ErrorScreen(errorText = state.error,
-                        retryAction = {viewModel.retry()})
+                        retryAction = {onRetry()})
         } else if (state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }

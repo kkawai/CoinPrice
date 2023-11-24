@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.kk.android.coinprice.common.Constants
 import com.kk.android.coinprice.ui.coindetail.CoinDetailScreen
+import com.kk.android.coinprice.ui.coindetail.CoinDetailViewModel
 import com.kk.android.coinprice.ui.coindetail.WebViewScreen
 import com.kk.android.coinprice.ui.coinlist.CoinListScreen
 import com.kk.android.coinprice.ui.coinlist.CoinsListViewModel
@@ -16,16 +17,16 @@ import com.kk.android.coinprice.ui.coinlist.CoinsListViewModel
 @Composable
 fun CoinNav() {
     val navController = rememberNavController()
-    val coinsListViewModel = hiltViewModel<CoinsListViewModel>()
     NavHost(
         navController = navController,
         startDestination = Screen.CoinListScreen.route
     ) {
 
         composable(Screen.CoinListScreen.route) {
+            val viewModel = hiltViewModel<CoinsListViewModel>()
             CoinListScreen(
-                getCoins = {coinsListViewModel::getCoins},
-                coinsListState = coinsListViewModel.coinsListState,
+                onRetry = {viewModel::getCoins},
+                coinsListState = viewModel.coinsListState,
                 onCoinClicked = { coinId ->
                     navController.navigate(
                         Screen.CoinDetailScreen.route + "/${coinId}"
@@ -40,7 +41,11 @@ fun CoinNav() {
             })
         )
         {
-            CoinDetailScreen(onFetchCoinPrice = { coinName, coinSymbol ->
+            val viewModel = hiltViewModel<CoinDetailViewModel>()
+            CoinDetailScreen(
+                coinDetailState = viewModel.coinDetailState,
+                onRetry = {viewModel.retry()},
+                onFetchCoinPrice = { coinName, coinSymbol ->
                 navController.navigate(Screen.CoinWebPageScreen.route + "/${coinName}/${coinSymbol}")
             })
         }
