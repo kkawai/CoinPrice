@@ -20,6 +20,7 @@ class CoinsListViewModel @Inject constructor(private val getCoinsUseCase: GetCoi
     ViewModel() {
 
     private val _coinsListState = mutableStateOf(CoinsListState())
+
     val coinsListState: State<CoinsListState> = _coinsListState
 
     init {

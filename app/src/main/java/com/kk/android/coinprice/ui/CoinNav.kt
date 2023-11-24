@@ -1,6 +1,7 @@
 package com.kk.android.coinprice.ui
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,20 +11,26 @@ import com.kk.android.coinprice.common.Constants
 import com.kk.android.coinprice.ui.coindetail.CoinDetailScreen
 import com.kk.android.coinprice.ui.coindetail.WebViewScreen
 import com.kk.android.coinprice.ui.coinlist.CoinListScreen
+import com.kk.android.coinprice.ui.coinlist.CoinsListViewModel
 
 @Composable
 fun CoinNav() {
     val navController = rememberNavController()
+    val coinsListViewModel = hiltViewModel<CoinsListViewModel>()
     NavHost(
         navController = navController,
         startDestination = Screen.CoinListScreen.route
     ) {
+
         composable(Screen.CoinListScreen.route) {
-            CoinListScreen(onCoinClicked = { coinId ->
-                navController.navigate(
-                    Screen.CoinDetailScreen.route + "/${coinId}"
-                )
-            }
+            CoinListScreen(
+                getCoins = {coinsListViewModel::getCoins},
+                coinsListState = coinsListViewModel.coinsListState,
+                onCoinClicked = { coinId ->
+                    navController.navigate(
+                        Screen.CoinDetailScreen.route + "/${coinId}"
+                    )
+                }
             )
         }
         composable(
